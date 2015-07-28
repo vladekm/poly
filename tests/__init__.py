@@ -1,1 +1,4 @@
-from test_load import TestLoadCase
+from test_load import LoadTestCase
+
+
+__all__ = ['LoadTestCase']
