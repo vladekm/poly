@@ -5,8 +5,8 @@ from polygons import Load, UnadaptedFacet
 class LoadTestCase(unittest.TestCase):
     def test_call_to_unadapted_facet_raises(self):
         myload = Load()
-        with self.assertRaises(UnadapterFacet):
-            myload.input.create()
+        with self.assertRaises(UnadaptedFacet):
+            myload.provides['input'].create()
 
     #def test_call_to_provided_facet_succeeds(self):
         #myload = Load()

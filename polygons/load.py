@@ -13,6 +13,7 @@ class Polygon(object):
     needs = {}
     provides = {}
     core = None
+    a = 'b'
 
     def __init__(self, provides=None, needs=None):
         if provides is None:
@@ -24,10 +25,12 @@ class Polygon(object):
         for key, facet in needs.items():
             self.needs[key] = Facet(facet)
 
-    def __getattr__(self, *args, **kwargs):
-        for attr in args:
-            if attr in self.provides:
-                return self.provides[attr]
+    #def __getattr__(self, *args, **kwargs):
+        #for attr in args:
+            #if attr in self.provides:
+                #return self.provides[attr]
+        #return super(Polygon, self).__getattr__(*args, **kwargs)
+
 
 class Load(Polygon):
     needs = {}
@@ -65,6 +68,7 @@ class Facet(object):
     Accepts adapters and does the basic check of adapter's conformity to the interface
     """
     def __init__(self, interface):
+        self.adapter = None
         self.interface = interface
 
     def plug(self, adapter):
@@ -75,8 +79,8 @@ class Facet(object):
         return True
 
     def __getattr__(self, attr):
-        if attr in self.interface:
-            return self.interface[attr]
+        if not self.adapter:
+            raise UnadaptedFacet('This facet has no adapter')
 
 
 #class ILoadInput(zope.interface.Interface):
