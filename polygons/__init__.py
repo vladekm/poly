@@ -1,5 +1,5 @@
 from load import Load
-from load import UnadaptedFacet
+from load import UnadaptedFacet, BrokenInterface
 
 
-__all__ = ['Load']
+__all__ = ['Load', 'UnadaptedFacet', 'BrokenInterface']

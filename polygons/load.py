@@ -61,6 +61,10 @@ class UnadaptedFacet(Exception):
     pass
 
 
+class BrokenInterface(Exception):
+    pass
+
+
 class Facet(object):
     """Holds the definition of the specific interface and allows for the adapters to be plugged in.
 
@@ -72,11 +76,11 @@ class Facet(object):
         self.interface = interface
 
     def plug(self, adapter):
-        if self.check_interface(adapter):
-            self.adapter = adapter
+        if not self.check_interface(adapter):
+            raise BrokenInterface()
 
     def check_interface(self, adapter):
-        return True
+        return False
 
     def __getattr__(self, attr):
         if not self.adapter:
