@@ -1,4 +1,19 @@
-import uuid
+import zope.interface as interface
+from zope.interface.verify import verifyClass
+
+
+class IMonogonProvides(interface.Interface):
+    def create():
+        pass
+
+    def read():
+        pass
+
+    def update():
+        pass
+
+    def delete():
+        pass
 
 
 class Polygon(object):
@@ -7,19 +22,12 @@ class Polygon(object):
 
     Expects to be provided with a definition of all the facets's on construction
     Expects adapters and the core on instantiation.
-    The core is a first class citizen and no checks are being done on it.
+    nThe core is a first class citizen and no checks are being done on it.
     Adapter checks are delegated to the facets.
     """
-    needs = {}
-    provides = {}
-    core = None
-    a = 'b'
-
     def __init__(self, provides=None, needs=None):
-        if provides is None:
-            provides = self.provides
-        if needs is None:
-            needs = self.needs
+        self.provides = {}
+        self.needs = {}
         for key, facet in provides.items():
             self.provides[key] = Facet(facet)
         for key, facet in needs.items():
@@ -32,29 +40,15 @@ class Polygon(object):
         #return super(Polygon, self).__getattr__(*args, **kwargs)
 
 
-class Load(Polygon):
-    needs = {}
-    provides = {
-        'input':{
-            '_name_': 'IInput',
-            'create': {
-                'name': str,
-                'weight': int,
-                'uuid': uuid.UUID,
-            },
-            'read': {
-                'uuid': uuid.UUID,
-            },
-            'update': {
-                'name': str,
-                'weight': int,
-                'uuid': uuid.UUID,
-            },
-            'delete': {
-                'uuid': uuid.UUID,
+class Monogon(Polygon):
+    def __init__(self):
+        needs = {}
+        provides = {
+            'input':{
+                'interface': IMonogonProvides,
             }
         }
-    }
+        super(Monogon, self).__init__(provides, needs)
 
 
 class UnadaptedFacet(Exception):
@@ -73,45 +67,11 @@ class Facet(object):
     """
     def __init__(self, interface):
         self.adapter = None
-        self.interface = interface
+        self.__dict__['interface'] = interface['interface']
 
     def plug(self, adapter):
-        if not self.check_interface(adapter):
-            raise BrokenInterface()
-
-    def check_interface(self, adapter):
-        return False
+        verifyClass(self.interface, adapter.__class__)
 
     def __getattr__(self, attr):
         if not self.adapter:
             raise UnadaptedFacet('This facet has no adapter')
-
-
-#class ILoadInput(zope.interface.Interface):
-    #def create():
-        #pass
-
-    #def read():
-        #pass
-
-    #def update():
-        #pass
-
-    #def delete():
-        #pass
-
-
-#class ILoadCRUD(IFacet):
-    #def create():
-        #pass
-
-    #def read():
-        #pass
-
-    #def update():
-        #pass
-
-    #def delete():
-        #pass
-
-

@@ -1,4 +1,4 @@
-from test_load import LoadTestCase
+from test_load import PolygonTestCase
 
 
-__all__ = ['LoadTestCase']
+__all__ = ['PolygonTestCase']

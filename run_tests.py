@@ -1,5 +1,5 @@
 import unittest
-from tests import LoadTestCase
+from tests import PolygonTestCase
 
 
 unittest.main()
