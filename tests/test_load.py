@@ -1,8 +1,9 @@
+from mock import Mock
 import unittest
 import zope.interface as interface
 from zope.interface.exceptions import BrokenImplementation
 
-from polygons import Monogon, UnadaptedFacet, BrokenInterface
+from polygons import Monogon, UnadaptedFacet
 from polygons import IMonogonProvides
 
 
@@ -36,8 +37,10 @@ class PolygonTestCase(unittest.TestCase):
 
     def test_call_to_adapted_facet_calls_adapters_method(self):
         my_polygon = Monogon()
-        fake_adapter = FakeAdapter()
+        fake_adapter = Mock(spec_set=FakeAdapter, name='MockFakeAdapter')
         my_polygon.provides['input'].plug(fake_adapter)
+        my_polygon.call('input', 'create', 'a', 'b', 'c')
+        fake_adapter.create.assert_called_once_with('a', 'b', 'c')
 
 
 class LoadTestCase(unittest.TestCase):

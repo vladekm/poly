@@ -39,6 +39,10 @@ class Polygon(object):
                 #return self.provides[attr]
         #return super(Polygon, self).__getattr__(*args, **kwargs)
 
+    def call(self, facet, method, *args, **kwargs):
+        method = self.provides[facet][method]
+        return method(*args, **kwargs)
+
 
 class Monogon(Polygon):
     def __init__(self):
@@ -71,7 +75,12 @@ class Facet(object):
 
     def plug(self, adapter):
         verifyClass(self.interface, adapter.__class__)
+        self.adapter = adapter
 
     def __getattr__(self, attr):
         if not self.adapter:
             raise UnadaptedFacet('This facet has no adapter')
+
+    def __getitem__(self, name):
+        attr = getattr(self.adapter, name);
+        return attr
