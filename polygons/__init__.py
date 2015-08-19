@@ -1,5 +1,8 @@
-from .load import UnadaptedFacet, BrokenInterface
-from .load import Monogon, IMonogonProvides
+'''Domain implementation.
+
+Import and expose the components here.
+'''
+from .load import Monogon
 
 
-__all__ = ['Monogon', 'UnadaptedFacet', 'BrokenInterface', 'IMonogonProvides']
+__all__ = ['Monogon']

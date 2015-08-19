@@ -1,4 +1,4 @@
-from test_load import PolygonTestCase
+from .test_load import MonogonTestCase
 
 
-__all__ = ['PolygonTestCase']
+__all__ = ['MonogonTestCase']

@@ -1,5 +1,4 @@
 import unittest
-import pdb; pdb.set_trace()
 from polygons import Monogon
 
 

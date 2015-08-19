@@ -1,6 +1,12 @@
-import unittest
-import pdb; pdb.set_trace()
-from tests import PolygonTestCase
+'''
+Tests runner.
 
+Import the TestCases you want to execute here.
+'''
+import unittest
+from .tests import MonogonTestCase
+
+
+__all__ = ['MonogonTestCase']
 
 unittest.main()
