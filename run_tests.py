@@ -1,10 +1,5 @@
-'''
-Tests runner.
-
-Import the TestCases you want to execute here.
-'''
 import unittest
-from .tests import MonogonTestCase
+from tests.test_load import MonogonTestCase
 
 
 __all__ = ['MonogonTestCase']

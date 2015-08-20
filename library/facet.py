@@ -1,8 +1,9 @@
+'''Definition of the base Facet'''
 from zope.interface.verify import verifyClass
 
 
 class UnadaptedFacet(Exception):
-    pass
+    """Raised on calls to unadapted facets"""
 
 
 class Facet(object):
@@ -16,6 +17,10 @@ class Facet(object):
         self.__dict__['interface'] = interface['interface']
 
     def plug(self, adapter):
+        """plug adapter into the facet
+
+        :param adapter adapter: the adapter to be plugged in
+        """
         verifyClass(self.interface, adapter.__class__)
         self.adapter = adapter
 
@@ -24,5 +29,5 @@ class Facet(object):
             raise UnadaptedFacet('This facet has no adapter')
 
     def __getitem__(self, name):
-        attr = getattr(self.adapter, name);
+        attr = getattr(self.adapter, name)
         return attr

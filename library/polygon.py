@@ -1,4 +1,5 @@
-from . import Facet
+'''Definition of the base Polygon'''
+from .facet import Facet
 
 
 class Polygon(object):
@@ -18,12 +19,15 @@ class Polygon(object):
         for key, facet in needs.items():
             self.needs[key] = Facet(facet)
 
-    #def __getattr__(self, *args, **kwargs):
-        #for attr in args:
-            #if attr in self.provides:
-                #return self.provides[attr]
-        #return super(Polygon, self).__getattr__(*args, **kwargs)
-
     def call(self, facet, method, *args, **kwargs):
+        """Call the polygon on specified facet.
+
+        :param string facet: string representation of the facet to be
+            called
+        :param string method: string representation of the method to
+            be executed
+        :param *args, **kwargs: will be passed on to the facet method
+
+        """
         method = self.provides[facet][method]
         return method(*args, **kwargs)
