@@ -27,6 +27,3 @@ class Monogon(Polygon):
         }
         super(Monogon, self).__init__(provides, needs)
 
-
-class BrokenInterface(Exception):
-    pass

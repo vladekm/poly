@@ -1,7 +1,4 @@
 import unittest
-from tests.test_load import MonogonTestCase
-
-
-__all__ = ['MonogonTestCase']
+from library.tests import *
 
 unittest.main()

@@ -1,5 +1,4 @@
 '''Definition of the base Polygon'''
-from .facet import Facet
 
 
 class Polygon(object):
@@ -12,12 +11,19 @@ class Polygon(object):
     Adapter checks are delegated to the facets.
     """
     def __init__(self, provides=None, needs=None):
-        self.provides = {}
-        self.needs = {}
-        for key, facet in provides.items():
-            self.provides[key] = Facet(facet)
-        for key, facet in needs.items():
-            self.needs[key] = Facet(facet)
+        self.provides = provides
+        self.needs = provides
+        #for key, facet in provides.items():
+            #self.provides[key] = Facet(facet)
+        #for key, facet in needs.items():
+            #self.needs[key] = Facet(facet)
+
+    def __getattr__(self, *args, **kwargs):
+        potential_facet_name = args[0]
+        if potential_facet_name in self.provides:
+            return self.provides[potential_facet_name]
+        return super(Polygon, self).__getattr__(*args, **kwargs)
+
 
     def call(self, facet, method, *args, **kwargs):
         """Call the polygon on specified facet.
