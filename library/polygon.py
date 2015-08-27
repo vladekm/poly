@@ -12,7 +12,7 @@ class Polygon(object):
     """
     def __init__(self, provides=None, needs=None):
         self.provides = provides
-        self.needs = provides
+        self.needs = needs
         #for key, facet in provides.items():
             #self.provides[key] = Facet(facet)
         #for key, facet in needs.items():

@@ -1,12 +1,19 @@
 '''Definition of the base Facet'''
 from zope.interface.verify import verifyClass
 
+from .exceptions import FacetConfigurationException
+
+
+class Facet(object):
+    def __init__(self, *args, **kwargs):
+        raise FacetConfigurationException()
+
 
 class UnadaptedFacet(Exception):
     """Raised on calls to unadapted facets"""
 
 
-class Facet(object):
+class Facet_Old(object):
     """Holds the definition of the specific interface and allows for the adapters to be plugged in.
 
     Expects a definition of a facet on instantiantion.

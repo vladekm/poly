@@ -2,6 +2,17 @@ from unittest import TestCase
 import mock
 
 from .polygon import Polygon
+from .facet import Facet
+from .exceptions import FacetConfigurationException
+
+
+class FacetTestCase(TestCase):
+    """Test Facet and its interface"""
+    def test_facet_without_behaviours_raises_Exception(self):
+        # W a facet is instantiated without any behaviours
+        # T a FacetConfiguration exception is raised
+        with self.assertRaises(FacetConfigurationException):
+            Facet()
 
 
 class PolygonTestCase(TestCase):
@@ -44,3 +55,13 @@ class PolygonTestCase(TestCase):
         # T the polygon exposes the facets as a dictionary
         expected = {'facet1': mfacet1, 'facet2': mfacet2}
         self.assertEquals(expected, my_polygon.provides)
+
+    def test_initialized_Polygon_exposes_its_needs_facets_as_a_dict(self):
+        # W a polygon is instantiated with a non empty provides facet
+        mfacet1 = mock.Mock()
+        mfacet2 = mock.Mock()
+        my_polygon = Polygon(needs={'facet1': mfacet1, 'facet2': mfacet2})
+        # T the polygon exposes the facets as a dictionary
+        expected = {'facet1': mfacet1, 'facet2': mfacet2}
+        self.assertEquals(expected, my_polygon.needs)
+
