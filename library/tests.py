@@ -1,5 +1,6 @@
 from unittest import TestCase
 import mock
+from zope import interface
 
 from .polygon import Polygon
 from .facet import Facet
@@ -8,11 +9,22 @@ from .exceptions import FacetConfigurationException
 
 class FacetTestCase(TestCase):
     """Test Facet and its interface"""
-    def test_facet_without_behaviours_raises_Exception(self):
-        # W a facet is instantiated without any behaviours
+    def test_facet_without_interface_raises_Exception(self):
+        # W a facet is instantiated without an interface
         # T a FacetConfiguration exception is raised
         with self.assertRaises(FacetConfigurationException):
             Facet()
+
+    def test_facet_with_unadapted_interface_raises_Exception(self):
+        # G an interface
+        class MyFacetInterface(interface.Interface):
+            def a_method():
+                pass
+        # G a facet is instantiated with a behaviour definition
+        my_facet = Facet(MyFacetInterface)
+        # T FacetConfiguration exception is raised on an unadapted interface access
+        with self.assertRaises(FacetConfigurationException):
+            my_facet.a_method()
 
 
 class PolygonTestCase(TestCase):

@@ -7,7 +7,7 @@ class Polygon(object):
 
     Expects to be provided with a definition of all the facets's on construction
     Expects adapters and the core on instantiation.
-    nThe core is a first class citizen and no checks are being done on it.
+    The core is a first class citizen and no checks are being done on it.
     Adapter checks are delegated to the facets.
     """
     def __init__(self, provides=None, needs=None):
