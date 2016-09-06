@@ -4,8 +4,11 @@ from zope import interface
 
 from .polygon import Polygon
 from .facet import Facet
-from .exceptions import FacetConfigurationException, UnadaptedPortException
-
+from .exceptions import (
+    BrokenInterfaceException,
+    FacetConfigurationException,
+    UnadaptedPortException,
+)
 
 class FacetTestCase(TestCase):
     """Test Facet and its interface"""
@@ -43,7 +46,23 @@ class FacetTestCase(TestCase):
         # T the adapter receives the call and the args and kwargs
         my_adapter.called_once()
 
+    def test_adapter_mismatching_the_port_raises_BrokenInterfaceException(self):
+        # G an interface
+        class MyFacetInterface(interface.Interface):
+            def a_method():
+                pass
+        # A an adapter
+        class MyAdapter(object):
+            pass
+        # A a facet
+        my_facet = Facet(MyFacetInterface)
+        # W the adapter is plugged in
+        # T the BrokenInterfaceException is raised
+        with self.assertRaises(BrokenInterfaceException):
+            my_facet.plug(MyAdapter())
 
+
+        
 
 class PolygonTestCase(TestCase):
     """Test Polygon setup"""
