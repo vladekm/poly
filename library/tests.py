@@ -4,18 +4,18 @@ from zope import interface
 
 from .polygon import Polygon
 from .facet import Facet
-from .exceptions import FacetConfigurationException
+from .exceptions import FacetConfigurationException, UnadaptedPortException
 
 
 class FacetTestCase(TestCase):
     """Test Facet and its interface"""
-    def test_facet_without_interface_raises_Exception(self):
+    def test_port_without_interface_raises_Exception(self):
         # W a facet is instantiated without an interface
         # T a FacetConfiguration exception is raised
         with self.assertRaises(FacetConfigurationException):
             Facet()
 
-    def test_facet_with_unadapted_interface_raises_Exception(self):
+    def test_port_with_unadapted_interface_raises_Exception(self):
         # G an interface
         class MyFacetInterface(interface.Interface):
             def a_method():
@@ -23,8 +23,26 @@ class FacetTestCase(TestCase):
         # G a facet is instantiated with a behaviour definition
         my_facet = Facet(MyFacetInterface)
         # T FacetConfiguration exception is raised on an unadapted interface access
-        with self.assertRaises(FacetConfigurationException):
+        with self.assertRaises(UnadaptedPortException):
             my_facet.a_method()
+
+    def test_calling_port_delegates_to_adapter(self):
+        # G an interface
+        class MyFacetInterface(interface.Interface):
+            def a_method():
+                pass
+        # A a mocked adapter
+        class MyAdapter(object):
+            def a_method(self):
+                pass
+        my_adapter = mock.Mock(autospec=MyAdapter)
+        # G a facet is instantiated with a behaviour definition
+        my_facet = Facet(MyFacetInterface, MyAdapter())
+        # W I call the port on its interface
+        my_facet.a_method()
+        # T the adapter receives the call and the args and kwargs
+        my_adapter.called_once()
+
 
 
 class PolygonTestCase(TestCase):

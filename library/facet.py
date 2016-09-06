@@ -1,7 +1,7 @@
 '''Definition of the base Facet'''
 from zope.interface.verify import verifyClass
 
-from .exceptions import FacetConfigurationException
+from .exceptions import FacetConfigurationException, UnadaptedPortException
 
 
 class Facet(object):
@@ -15,9 +15,11 @@ class Facet(object):
         if not (interface):
             raise FacetConfigurationException()
 
-    def __getattr__(self, attr):
+    def __getattr__(self, name):
         if not self.adapter:
-            raise FacetConfigurationException('This facet has no adapter')
+            raise UnadaptedPortException('This facet has no adapter')
+        attr = getattr(self.adapter, name)
+        return attr
 
 
 class Facet_Old(object):
@@ -32,6 +34,3 @@ class Facet_Old(object):
         verifyClass(self.interface, adapter.__class__)
         self.adapter = adapter
 
-    def __getitem__(self, name):
-        attr = getattr(self.adapter, name)
-        return attr
