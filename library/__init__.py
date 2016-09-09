@@ -1,9 +1,6 @@
-'''Main namespace
-
-Please import from here
-'''
+'''Main namespace'''
 from .polygon import Polygon
-from .facet import Facet
+from .port import Port
 
 
-__all__ = ['Polygon', 'UnadaptedFacet', 'Facet']
+__all__ = ['Polygon', 'Port']

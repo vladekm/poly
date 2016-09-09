@@ -1,8 +1,8 @@
-class FacetConfigurationException(Exception):
-    """Facet is misconfigured"""
+class PortConfigurationException(Exception):
+    """Port is misconfigured"""
 
-class UnadaptedPortException(FacetConfigurationException):
+class UnadaptedPortException(PortConfigurationException):
     """Port is not adapted"""
 
-class BrokenInterfaceException(FacetConfigurationException):
+class BrokenInterfaceException(PortConfigurationException):
     """Adapter does not match the port"""
