@@ -1,4 +1,5 @@
 '''Definition of the base Polygon'''
+RESERVED_WORDS = ['needs', 'provides']
 
 
 class Polygon(object):
@@ -11,18 +12,19 @@ class Polygon(object):
     Adapter checks are delegated to the ports.
     """
     def __init__(self, provides=None, needs=None):
-        self.provides = provides
-        self.needs = needs
-        #for key, port in provides.items():
-            #self.provides[key] = Facet(port)
-        #for key, port in needs.items():
-            #self.needs[key] = Facet(port)
+        self.provides = provides or {}
+        self.needs = needs or {}
+        for key in self.needs.keys():
+            if key in RESERVED_WORDS:
+                raise Exception("OMG this port name is a reserver word")
+        for key in self.provides.keys():
+            if key in RESERVED_WORDS:
+                raise Exception("OMG this port name is a reserver word")
 
     def __getattr__(self, *args, **kwargs):
         potential_port_name = args[0]
-        if potential_port_name in self.provides:
+        if self.provides and  potential_port_name in self.provides:
             return self.provides[potential_port_name]
-        return super(Polygon, self).__getattr__(*args, **kwargs)
 
 
     def call(self, port, method, *args, **kwargs):

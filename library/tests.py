@@ -107,7 +107,7 @@ class PolygonTestCase(TestCase):
         # T the call is made with provided args and kwargs
         my_port.get_potatoes.assert_called_once_with('fresh', amount=3)
 
-    def test_Polygon_is_initialized_and_port_is_accessible_as_attr(self):
+    def test_Polygon_provides_port_is_accessible_as_attr(self):
         # W a polygon is instantiated with a non empty provides port
         my_port = mock.Mock()
         my_polygon = Polygon(provides={'port1': my_port})
@@ -115,6 +115,16 @@ class PolygonTestCase(TestCase):
         my_polygon.port1.get_potatoes('fresh', amount=3)
         # T the call is made with provided args and kwargs
         my_port.get_potatoes.assert_called_once_with('fresh', amount=3)
+
+    def test_Polygon_needs_port_is_not_accessible_as_attr(self):
+        # G a polygon is instantiated with a non empty provides port
+        my_port = mock.Mock()
+        my_polygon = Polygon(needs={'needs1': my_port})
+        # W the needs port is called on the polygon
+        # T the exception is raised
+        # TODO: Decide on the exception
+        with self.assertRaises(Exception):
+            my_polygon.needs1.get_potatoes('fresh', amount=3)
 
     def test_initialized_Polygon_exposes_its_provides_ports_as_a_dict(self):
         # W a polygon is instantiated with a non empty provides port
@@ -133,4 +143,12 @@ class PolygonTestCase(TestCase):
         # T the polygon exposes the ports as a dictionary
         expected = {'port1': mport1, 'port2': mport2}
         self.assertEquals(expected, my_polygon.needs)
+
+    def test_port_cannot_be_named_a_reserved_word(self):
+        RESERVED_WORDS = ['needs', 'provides']
+        # W a Polygon is instantiated with a reserved word for a port name
+        # T an exception is raised
+        for word in RESERVED_WORDS:
+            with self.assertRaises(Exception):
+                Polygon(needs={word: None, 'whatever': None})
 
