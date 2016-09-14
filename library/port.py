@@ -1,6 +1,6 @@
 '''Definition of the base Port'''
 from zope.interface.verify import verifyClass
-from zope.interface.exceptions import DoesNotImplement
+from zope.interface.exceptions import Invalid
 
 from .exceptions import (
     BrokenInterfaceException,
@@ -16,7 +16,7 @@ class Port(object):
     Accepts adapters and does the basic check of adapter's conformity to the interface
     """
     def __init__(self, interface=None, adapter=None):
-        if not (interface):
+        if not interface:
             raise PortConfigurationException()
         self.adapter = None
         self.interface = interface
@@ -36,6 +36,6 @@ class Port(object):
         """
         try:
             verifyClass(self.interface, adapter.__class__)
-        except DoesNotImplement as e:
-            raise BrokenInterfaceException(e)
+        except Invalid as exception:
+            raise BrokenInterfaceException(exception)
         self.adapter = adapter

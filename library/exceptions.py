@@ -1,3 +1,6 @@
+"""Exceptions for use with the framework"""
+
+
 class PortConfigurationException(Exception):
     """Port is misconfigured"""
 

@@ -1,3 +1,5 @@
+"""Tests for the basic concepts"""
+
 import mock
 
 from unittest import TestCase
@@ -13,37 +15,39 @@ from .polygon import Polygon
 
 
 class PortInstantiationTestCase(TestCase):
+    """TestCase for the port instantiation"""
     def setUp(self):
+        """Generic test setup"""
         # G an interface
         class ITestInterface(interface.Interface):
-            def a_method(a, b=1):
+            def a_method(param1, param2=1):
                 pass
         self.interface = ITestInterface
         # A a mock adapter
         class MyAdapter(object):
             interface.implements(self.interface)
-            def a_method(self, a, b=1):
-                self.a = a
-                self.b = b
+            def a_method(self, param1, param2=1):
+                self.param1 = param1
+                self.param2 = param2
         self.adapter = MyAdapter()
 
     def test_calling_port_adapted_on_instantiation_delegates_to_adapter(self):
         # G a port is instantiated with a behaviour definition
         my_port = Port(self.interface, self.adapter)
         # W I call the port on its interface
-        my_port.a_method('a', b=1)
+        my_port.a_method('a', param2=1)
         # T the adapter receives the call and the args and kwargs
-        self.assertEquals('a', my_port.a)
-        self.assertEquals(1, my_port.b)
+        self.assertEquals('a', my_port.param1)
+        self.assertEquals(1, my_port.param2)
 
     def test_calling_port_plugged_post_instantiation_delegates_to_adapter(self):
-        # G a port is instantiated 
+        # G a port is instantiated
         my_port = Port(self.interface, self.adapter)
         # W I call the port on its interface
-        my_port.a_method('a', b=1)
+        my_port.a_method('a', param2=1)
         # T the adapter receives the call and the args and kwargs
-        self.assertEquals('a', self.adapter.a)
-        self.assertEquals(1, self.adapter.b)
+        self.assertEquals('a', self.adapter.param1)
+        self.assertEquals(1, self.adapter.param2)
 
     def test_port_without_interface_raises_Exception(self):
         # W a port is instantiated without an interface
@@ -63,25 +67,34 @@ class PortAdaptationTestCase(TestCase):
         # G a port is instantiated
         my_port = Port(MyPortInterface)
         # W I access the unadapted interface
-        # T PortConfiguration exception is raised 
+        # T PortConfiguration exception is raised
         with self.assertRaises(UnadaptedPortException):
-            my_port.a_method()
+            my_port.param1_method()
 
-    def test_adapter_mismatching_the_port_raises_BrokenInterfaceException(self):
+    def test_mistmatching_adapter_raises_BrokenInterfaceException(self):
         # G an interface
         class IPortInterface(interface.Interface):
-            def a_method(a, b=1):
+            def a_method(param1, param2=1):
                 pass
-        # A an adapter
-        class MyAdapter(object):
-            def a_method(self, a):
+        # A mistmatching adapters
+        class AdapterWithoutAMethod(object):
+            interface.implements(IPortInterface)
+            pass
+        class AdapterWithABrokenMethod(object):
+            interface.implements(IPortInterface)
+            def a_method(self):
                 pass
-        # Asa port
+        mismatching_adapters = [
+            AdapterWithoutAMethod,
+            AdapterWithABrokenMethod
+        ]
+        # A a port
         my_port = Port(IPortInterface)
-        # W the adapter is plugged in
+        # W an adapter is plugged in
         # T the BrokenInterfaceException is raised
-        with self.assertRaises(BrokenInterfaceException):
-            my_port.plug(MyAdapter())
+        for adapter in mismatching_adapters:
+            with self.assertRaises(BrokenInterfaceException):
+                my_port.plug(adapter())
 
 
 class PolygonTestCase(TestCase):
