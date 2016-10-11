@@ -1,9 +1,10 @@
-import zope.interface as interface
+from zope import interface
 
-from library import Polygon
+from ..library import Polygon
 
 
 class IMonogonProvides(interface.Interface):
+    """Monogon interface"""
     def create():
         pass
 
@@ -27,3 +28,5 @@ class Monogon(Polygon):
         }
         super(Monogon, self).__init__(provides, needs)
 
+    def create(self):
+        pass
