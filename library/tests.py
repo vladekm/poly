@@ -1,4 +1,5 @@
 """Tests for the basic concepts"""
+# pylint: disable=too-few-public-methods, no-self-use, missing-docstring
 
 from unittest import TestCase
 import mock
@@ -24,7 +25,7 @@ class PortInstantiationTestCase(TestCase):
                 pass
         self.interface = ITestInterface
         # A a mock adapter
-        class MyAdapter(object):  # pylint: disable=too-few-public-methods
+        class MyAdapter(object):
             def __init__(self):
                 self.param1 = None
                 self.param2 = None
@@ -166,4 +167,3 @@ class PolygonTestCase(TestCase):
         for word in reserved_words:
             with self.assertRaises(Exception):
                 Polygon(needs={word: None, 'whatever': None})
-

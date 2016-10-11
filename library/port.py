@@ -10,10 +10,11 @@ from .exceptions import (
 
 
 class Port(object):
-    """Holds the definition of the specific interface and allows for the adapters to be plugged in.
+    """Allows for the adapter to be plugged in.
 
     Expects a definition of a port on instantiantion.
-    Accepts adapters and does the basic check of adapter's conformity to the interface
+    Accepts adapters and does the basic check of adapter's conformity
+    to the interface
     """
     def __init__(self, interface=None, adapter=None):
         if not interface:
