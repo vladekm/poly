@@ -41,7 +41,7 @@ class PortInstantiationTestCase(TestCase):
         # W I call the port on its interface
         my_port.a_method('a', param2=1)
         # T the adapter receives the call and the args and kwargs
-        self.assertEquals('a', my_portm.param1)
+        self.assertEquals('a', my_port.param1)
         self.assertEquals(1, my_port.param2)
 
     def test_call_port_plugged_post_instantiation_delegates_to_adapter(self):
