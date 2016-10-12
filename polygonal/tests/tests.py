@@ -21,15 +21,19 @@ class PortInstantiationTestCase(TestCase):
         """Generic test setup"""
         # G an interface
         class ITestInterface(Interface):
+
             def a_method(param1, param2=1):
                 pass
         self.interface = ITestInterface
+
         # A a mock adapter
         class MyAdapter(object):
+            implements(self.interface)
+
             def __init__(self):
                 self.param1 = None
                 self.param2 = None
-            implements(self.interface)
+
             def a_method(self, param1, param2=1):
                 self.param1 = param1
                 self.param2 = param2
@@ -81,10 +85,13 @@ class PortAdaptationTestCase(TestCase):
             def a_method(param1, param2=1):
                 pass
         # A mistmatching adapters
+
         class AdapterWithoutAMethod(object):
             implements(IPortInterface)
+
         class AdapterWithABrokenMethod(object):
             implements(IPortInterface)
+
             def a_method(self):
                 pass
         mismatching_adapters = [

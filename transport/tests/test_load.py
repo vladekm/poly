@@ -11,4 +11,3 @@ class MonogonTestCase(unittest.TestCase):
         my_gon = Monogon()
         my_gon.create()
         # TODO: this is totally broken
-

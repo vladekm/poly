@@ -23,9 +23,8 @@ class Polygon(object):
 
     def __getattr__(self, *args, **kwargs):
         potential_port_name = args[0]
-        if self.provides and  potential_port_name in self.provides:
+        if self.provides and potential_port_name in self.provides:
             return self.provides[potential_port_name]
-
 
     def call(self, port, method, *args, **kwargs):
         """Call the polygon on specified port.
