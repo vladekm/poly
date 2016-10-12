@@ -1,6 +1,6 @@
 from zope import interface
 
-from ..library import Polygon
+from ..polygonal import Polygon
 
 
 class IMonogonProvides(interface.Interface):
