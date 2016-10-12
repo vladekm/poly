@@ -6,13 +6,13 @@ import mock
 
 from zope.interface import Interface, implements
 
-from .exceptions import (
+from ..exceptions import (
     UnadaptedPortException,
     BrokenInterfaceException,
     PortConfigurationException,
 )
-from .port import Port
-from .polygon import Polygon
+from ..port import Port
+from ..polygon import Polygon
 
 
 class PortInstantiationTestCase(TestCase):
