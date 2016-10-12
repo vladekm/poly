@@ -1,6 +1,7 @@
 """Tests for the Polygons used for the service"""
 import unittest
-from ..polygons import Monogon
+
+from ...polygonal.polygons import Monogon
 
 
 class MonogonTestCase(unittest.TestCase):
