@@ -1,5 +1,5 @@
 '''Definition of the base Polygon'''
-RESERVED_WORDS = ['needs', 'provides']
+RESERVED_WORDS = ['api', 'needs', 'provides']
 
 
 class Polygon(object):
@@ -12,19 +12,21 @@ class Polygon(object):
     Adapter checks are delegated to the ports.
     """
     def __init__(self, provides=None, needs=None):
-        self.provides = provides or {}
-        self.needs = needs or {}
-        for key in self.needs.keys():
+        provides = provides or {}
+        needs = needs or {}
+        for key in list(needs.keys() + provides.keys()):
             if key in RESERVED_WORDS:
-                raise Exception("OMG this port name is a reserver word")
-        for key in self.provides.keys():
-            if key in RESERVED_WORDS:
-                raise Exception("OMG this port name is a reserver word")
+                raise AttributeError(
+                    "'{}': this is a reserved word.".format(key)
+                )
+        self.provides = provides
+        self.needs = needs
 
     def __getattr__(self, *args, **kwargs):
         potential_port_name = args[0]
         if self.provides and potential_port_name in self.provides:
             return self.provides[potential_port_name]
+        raise AttributeError()
 
     def call(self, port, method, *args, **kwargs):
         """Call the polygon on specified port.
