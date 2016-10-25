@@ -30,6 +30,16 @@ class Port(object):
         attr = getattr(self.adapter, name)
         return attr
 
+    def __repr__(self):
+        mydict = self.__dict__
+        mydict.update({'klas': self.__class__})
+        return (
+            "{klas}("
+            "interface={interface}, "
+            "adapter={adapter}"
+            ")".format(**mydict)
+        )
+
     def plug(self, adapter):
         """plug adapter into the port
 

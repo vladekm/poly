@@ -11,8 +11,8 @@ from ..exceptions import (
     BrokenInterfaceException,
     PortConfigurationException,
 )
-from ..port import Port
-from ..polygon import Polygon
+from .. import Port
+from .. import Polygon
 
 
 class PortInstantiationTestCase(TestCase):
@@ -39,8 +39,23 @@ class PortInstantiationTestCase(TestCase):
                 self.param2 = param2
         self.adapter = MyAdapter()
 
+    def test_port_can_be_repred(self):
+        # G a port is instantiated with an interface and an adapter
+        my_port = Port(self.interface, self.adapter)
+        # W repr is generated
+        my_repr = repr(my_port)
+        import pdb; pdb.set_trace()
+        # T the repr matches the expected value
+        expected_repr = (
+            "{}("
+            "interface={}, "
+            "adapter={})"
+            "".format(Port, self.interface, self.adapter)
+        )
+        self.assertEquals(expected_repr, my_repr)
+
     def test_calling_port_adapted_on_instantiation_delegates_to_adapter(self):
-        # G a port is instantiated with a behaviour definition
+        # G a port is instantiated with an interface and an adapter 
         my_port = Port(self.interface, self.adapter)
         # W I call the port on its interface
         my_port.a_method('a', param2=1)
@@ -49,8 +64,10 @@ class PortInstantiationTestCase(TestCase):
         self.assertEquals(1, my_port.param2)
 
     def test_call_port_plugged_post_instantiation_delegates_to_adapter(self):
-        # G a port is instantiated
-        my_port = Port(self.interface, self.adapter)
+        # G a port is instantiated without an adapter
+        my_port = Port(self.interface)
+        # G and an adapter is plugged into the port
+        my_port.plug(self.adapter)
         # W I call the port on its interface
         my_port.a_method('a', param2=1)
         # T the adapter receives the call and the args and kwargs
@@ -171,12 +188,11 @@ class PolygonTestCase(TestCase):
         for word in reserved_words:
             with self.assertRaisesRegexp(
                 AttributeError,
-                "'{}': this is a reserved word.".format(word)
+                "'{}' is a reserved word.".format(word)
             ):
                 Polygon(needs={word: None, 'whatever': None})
-        for word in reserved_words:
             with self.assertRaisesRegexp(
                 AttributeError,
-                "'{}': this is a reserved word.".format(word)
+                "'{}' is a reserved word.".format(word)
             ):
                 Polygon(provides={word: None, 'whatever': None})

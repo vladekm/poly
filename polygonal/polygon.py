@@ -17,7 +17,7 @@ class Polygon(object):
         for key in list(needs.keys() + provides.keys()):
             if key in RESERVED_WORDS:
                 raise AttributeError(
-                    "'{}': this is a reserved word.".format(key)
+                    "'{}' is a reserved word.".format(key)
                 )
         self.provides = provides
         self.needs = needs
