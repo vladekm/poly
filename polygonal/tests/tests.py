@@ -39,7 +39,7 @@ class PortTestCaseBase(TestCase):
         self.adapter = MyAdapter()
 
 
-class PortMagicsTestCase(PortTestCaseBase, TestCase):
+class PortFrameworkUtilsTestCase(PortTestCaseBase, TestCase):
     """TestCase framework helpers."""
 
     def test_port_can_be_repred(self):
