@@ -44,7 +44,6 @@ class PortInstantiationTestCase(TestCase):
         my_port = Port(self.interface, self.adapter)
         # W repr is generated
         my_repr = repr(my_port)
-        import pdb; pdb.set_trace()
         # T the repr matches the expected value
         expected_repr = (
             "{}("
