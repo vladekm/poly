@@ -64,10 +64,10 @@ class PortMagicsTestCase(PortTestCaseBase, TestCase):
         my_str = str(my_port)
         # T the repr matches the expected value
         expected_str = (
-            "{}("
-            "interface={}, "
-            "adapter={})"
-            "".format(Port, self.interface, self.adapter)
+            """{}(
+    interface={}, "
+    adapter={}
+)""".format(Port, self.interface, self.adapter)
         )
         self.assertEquals(expected_str, my_str)
 
