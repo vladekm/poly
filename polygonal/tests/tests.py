@@ -11,8 +11,8 @@ from ..exceptions import (
     BrokenInterfaceException,
     PortConfigurationException,
 )
-from .. import Port
-from .. import Polygon
+from ..port import Port
+from ..polygon import Polygon
 
 
 class PortInstantiationTestCase(TestCase):
@@ -52,6 +52,7 @@ class PortInstantiationTestCase(TestCase):
             "".format(Port, self.interface, self.adapter)
         )
         self.assertEquals(expected_repr, my_repr)
+
 
     def test_calling_port_adapted_on_instantiation_delegates_to_adapter(self):
         # G a port is instantiated with an interface and an adapter 
