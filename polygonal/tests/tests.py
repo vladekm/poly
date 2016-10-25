@@ -11,12 +11,11 @@ from ..exceptions import (
     BrokenInterfaceException,
     PortConfigurationException,
 )
-from ..port import Port
-from ..polygon import Polygon
+from .. import Port
+from .. import Polygon
 
 
-class PortInstantiationTestCase(TestCase):
-    """TestCase for the port instantiation"""
+class PortTestCaseBase(TestCase):
     def setUp(self):
         """Generic test setup"""
         # G an interface
@@ -39,6 +38,10 @@ class PortInstantiationTestCase(TestCase):
                 self.param2 = param2
         self.adapter = MyAdapter()
 
+
+class PortMagicsTestCase(PortTestCaseBase, TestCase):
+    """TestCase framework helpers."""
+
     def test_port_can_be_repred(self):
         # G a port is instantiated with an interface and an adapter
         my_port = Port(self.interface, self.adapter)
@@ -54,8 +57,25 @@ class PortInstantiationTestCase(TestCase):
         self.assertEquals(expected_repr, my_repr)
 
 
+    def test_port_can_be_stred(self):
+        # G a port is instantiated with an interface and an adapter
+        my_port = Port(self.interface, self.adapter)
+        # W repr is generated
+        my_str = str(my_port)
+        # T the repr matches the expected value
+        expected_str = (
+            "{}("
+            "interface={}, "
+            "adapter={})"
+            "".format(Port, self.interface, self.adapter)
+        )
+        self.assertEquals(expected_str, my_str)
+
+
+class PortInstantiationTestCase(PortTestCaseBase):
+    """TestCase for the port instantiation"""
     def test_calling_port_adapted_on_instantiation_delegates_to_adapter(self):
-        # G a port is instantiated with an interface and an adapter 
+        # G a port is instantiated with an interface and an adapter
         my_port = Port(self.interface, self.adapter)
         # W I call the port on its interface
         my_port.a_method('a', param2=1)
