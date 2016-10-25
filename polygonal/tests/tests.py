@@ -57,21 +57,6 @@ class PortMagicsTestCase(PortTestCaseBase, TestCase):
         self.assertEquals(expected_repr, my_repr)
 
 
-    def test_port_can_be_stred(self):
-        # G a port is instantiated with an interface and an adapter
-        my_port = Port(self.interface, self.adapter)
-        # W repr is generated
-        my_str = str(my_port)
-        # T the repr matches the expected value
-        expected_str = (
-            """{}(
-    interface={}, "
-    adapter={}
-)""".format(Port, self.interface, self.adapter)
-        )
-        self.assertEquals(expected_str, my_str)
-
-
 class PortInstantiationTestCase(PortTestCaseBase):
     """TestCase for the port instantiation"""
     def test_calling_port_adapted_on_instantiation_delegates_to_adapter(self):
