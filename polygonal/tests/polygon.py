@@ -79,3 +79,26 @@ class PolygonTestCase(TestCase):
                 "'{}' is a reserved word.".format(word)
             ):
                 Polygon(provides={word: None, 'whatever': None})
+
+class PolygonFrameworkUtilsTestCase(TestCase):
+    def test_polygon_can_be_repred(self):
+        # W a polygon is instantiated with a non empty api
+        my_port1 = mock.Mock()
+        my_port2 = mock.Mock()
+        my_polygon = Polygon(
+            provides={'my_port1': my_port1},
+            needs={'my_port2': my_port2}
+        )
+        my_repr = repr(my_polygon)
+        # T the repr matches the expected value
+        expected_repr = (
+            "{}("
+            "provides={}, "
+            "needs={})"
+            ""
+        ).format(
+            Polygon,
+            {'my_port1': my_port1},
+            {'my_port2': my_port2},
+        )
+        self.assertEquals(expected_repr, my_repr)

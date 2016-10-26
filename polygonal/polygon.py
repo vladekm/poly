@@ -28,6 +28,14 @@ class Polygon(object):
             return self.provides[potential_port_name]
         raise AttributeError()
 
+    def __repr__(self):
+        return (
+            "{}("
+            "provides={}, "
+            "needs={})"
+            "".format(Polygon, self.provides, self.needs)
+        )
+
     def call(self, port, method, *args, **kwargs):
         """Call the polygon on specified port.
 
