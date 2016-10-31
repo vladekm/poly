@@ -1,5 +1,5 @@
 """Tests for Polygon"""
-# pylint: disable = no-self-use, inherit-non-class, no-self-argument
+# pylint: disable = no-self-use, inherit-non-class, no-self-argument, missing-docstring
 
 from unittest import TestCase
 import mock
@@ -48,50 +48,6 @@ class PolygonTestCase(TestCase):
         with self.assertRaises(AttributeError):
             my_polygon.needs1()
 
-
-class PolygonWiresUpTheCore(TestCase):
-    """Test that the polygon can wire up the core"""
-    def test_core_plugs_into_apis(self):
-        #G two APIs
-        class IAPI1(Interface):
-            def a1_m1(param1, param2):
-                pass
-
-        class IAPI2(Interface):
-            def a2_m1(param1, param2):
-                pass
-            def a2_m2(param1, param2):
-                pass
-        # G two ports
-        myp1 = Port(IAPI1)
-        myp2 = Port(IAPI2)
-        # G a core
-        class ACore(object):
-            implements(IAPI1, IAPI2)
-            def a1_m1(self, param1, param2):
-                return param1 + param2
-            def a2_m1(self, param1, param2):
-                return param1 + param2
-            def a2_m2(self, param1, param2):
-                return param1 + param2
-        # A the Polygon is instantiated
-        my_gon = Polygon(
-            provides={'api1': myp1, 'api2': myp2},
-            needs=None,
-        )
-        # W the core is added
-        my_gon.add_core(ACore())
-        # T the polygon gives access to the core on correct methods
-        res_api1_a1_m1 = my_gon.api1.a1_m1('a', 'b')
-        res_api2_a2_m1 = my_gon.api2.a2_m1('c', 'd')
-        res_api2_a2_m2 = my_gon.api2.a2_m2('e', 'f')
-        self.assertEquals('ab', res_api1_a1_m1)
-        self.assertEquals('cd', res_api2_a2_m1)
-        self.assertEquals('ef', res_api2_a2_m2)
-
-
-
-
     def test_initialized_polygon_exposes_its_provides_ports_as_a_dict(self):
         # W a polygon is instantiated with a non empty provides port
         mport1 = mock.Mock()
@@ -125,6 +81,49 @@ class PolygonWiresUpTheCore(TestCase):
                 "'{}' is a reserved word.".format(word)
             ):
                 Polygon(provides={word: None, 'whatever': None})
+
+
+class PolygonWiresUpTheCore(TestCase):
+    """Test that the polygon can wire up the core"""
+    def setUp(self):
+        #G two APIs
+        class IAPI1(Interface):
+            def a1_m1(param1, param2):
+                pass
+        class IAPI2(Interface):
+            def a2_m1(param1, param2):
+                pass
+            def a2_m2(param1, param2):
+                pass
+        # G two ports
+        self.myp1 = Port(IAPI1)
+        self.myp2 = Port(IAPI2)
+        # G a core
+        class ACore(object):
+            implements(IAPI1, IAPI2)
+            def a1_m1(self, param1, param2):
+                return param1 + param2
+            def a2_m1(self, param1, param2):
+                return param1 + param2
+            def a2_m2(self, param1, param2):
+                return param1 + param2
+        self.core = ACore
+
+    def test_core_plugs_into_apis(self):
+        # A the Polygon is instantiated
+        my_gon = Polygon(
+            provides={'api1': self.myp1, 'api2': self.myp2},
+            needs=None,
+        )
+        # W the core is added
+        my_gon.add_core(self.core())
+        # T the polygon gives access to the core on correct methods
+        res_api1_a1_m1 = my_gon.api1.a1_m1('a', 'b')
+        res_api2_a2_m1 = my_gon.api2.a2_m1('c', 'd')
+        res_api2_a2_m2 = my_gon.api2.a2_m2('e', 'f')
+        self.assertEquals('ab', res_api1_a1_m1)
+        self.assertEquals('cd', res_api2_a2_m1)
+        self.assertEquals('ef', res_api2_a2_m2)
 
 
 class PolygonFrameworkUtilsTestCase(TestCase):
