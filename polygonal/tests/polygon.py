@@ -135,7 +135,7 @@ class PolygonWiresUpTheCore(TestCase):
         # W the Polygon is instantiated with a core
         my_gon = Polygon(
             provides={'api1': self.myp1, 'api2': self.myp2},
-            core=self.core()
+            core=self.core
         )
         # T the polygon gives access to the core on correct methods
         res_api1_a1_m1 = my_gon.api1.a1_m1('a', 'b')

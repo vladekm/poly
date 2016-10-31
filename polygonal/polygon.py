@@ -22,7 +22,9 @@ class Polygon(object):
         self.provides = provides
         self.needs = needs
         if core:
-            self.add_core(core)
+            my_core = core()
+            self._add_core(my_core)
+
 
     def __getattr__(self, *args, **kwargs):
         potential_port_name = args[0]
@@ -52,5 +54,8 @@ class Polygon(object):
         return method(*args, **kwargs)
 
     def add_core(self, core):
+        self._add_core(core)
+
+    def _add_core(self, core):
         for port in self.provides.values():
             port.plug(core)
