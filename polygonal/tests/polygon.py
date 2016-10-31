@@ -1,5 +1,6 @@
 """Tests for Polygon"""
-# pylint: disable = no-self-use, inherit-non-class, no-self-argument, missing-docstring
+# pylint: disable = no-self-use, inherit-non-class, no-self-argument
+# pylint: disable = missing-docstring
 
 from unittest import TestCase
 import mock
@@ -86,25 +87,31 @@ class PolygonTestCase(TestCase):
 class PolygonWiresUpTheCore(TestCase):
     """Test that the polygon can wire up the core"""
     def setUp(self):
-        #G two APIs
+        # G two APIs
         class IAPI1(Interface):
             def a1_m1(param1, param2):
                 pass
+
         class IAPI2(Interface):
             def a2_m1(param1, param2):
                 pass
+
             def a2_m2(param1, param2):
                 pass
         # G two ports
         self.myp1 = Port(IAPI1)
         self.myp2 = Port(IAPI2)
         # G a core
+
         class ACore(object):
             implements(IAPI1, IAPI2)
+
             def a1_m1(self, param1, param2):
                 return param1 + param2
+
             def a2_m1(self, param1, param2):
                 return param1 + param2
+
             def a2_m2(self, param1, param2):
                 return param1 + param2
         self.core = ACore
@@ -137,7 +144,6 @@ class PolygonWiresUpTheCore(TestCase):
         self.assertEquals('ab', res_api1_a1_m1)
         self.assertEquals('cd', res_api2_a2_m1)
         self.assertEquals('ef', res_api2_a2_m2)
-
 
 
 class PolygonFrameworkUtilsTestCase(TestCase):
