@@ -1,8 +1,9 @@
 """Tests for Polygon"""
-# pylint: disable=too-few-public-methods, no-self-use, missing-docstring
+# pylint: disable = no-self-use, inherit-non-class, no-self-argument
 
 from unittest import TestCase
 import mock
+from zope.interface import Interface, implements
 
 from .. import Polygon
 
@@ -23,12 +24,12 @@ class PolygonTestCase(TestCase):
 
     def test_polygon_provides_api_as_its_attribute(self):
         # W a polygon is instantiated with a non empty api
-        my_port = mock.Mock()
-        my_polygon = Polygon(provides={'port1': my_port})
+        my_api = mock.Mock()
+        my_polygon = Polygon(provides={'api1': my_api})
         # T the new api port is exposed as an attribute
-        my_polygon.port1.get_potatoes('fresh', amount=3)
+        my_polygon.api1.get_potatoes('fresh', amount=3)
         # T the call to the api is made with provided args and kwargs
-        my_port.get_potatoes.assert_called_once_with('fresh', amount=3)
+        my_api.get_potatoes.assert_called_once_with('fresh', amount=3)
 
     def test_access_to_missing_api_raises_attributeerror(self):
         # W a polygon is instantiated without an api
@@ -36,7 +37,7 @@ class PolygonTestCase(TestCase):
         # W an non-existant API is accessed
         # T an AttributeError is raised
         with self.assertRaises(AttributeError):
-            my_polygon.not_there
+            my_polygon.not_there()
 
     def test_polygon_needs_port_is_not_accessible_as_attr(self):
         # G a polygon is instantiated with a needs port
@@ -44,7 +45,28 @@ class PolygonTestCase(TestCase):
         # W the needs port is called on the polygon
         # T an AttributeError is raised
         with self.assertRaises(AttributeError):
-            my_polygon.needs1
+            my_polygon.needs1()
+
+
+class PolygonWiresUpTheCore(TestCase):
+    """Test that the polygon can wire up the core"""
+    def test_core_plugs_into_apis(self):
+        #G two APIs
+        class IAPI1(Interface):
+            def a1_m1(param1, param2):
+                pass
+
+        class IAPI2(Interface):
+            def a2_m1(param1, param2):
+                pass
+            def a2_m2(param1, param2):
+                pass
+        # G a core
+        class ACore(object):
+            implements(IAPI1)
+            implements(IAPI2)
+
+
 
     def test_initialized_polygon_exposes_its_provides_ports_as_a_dict(self):
         # W a polygon is instantiated with a non empty provides port
@@ -79,6 +101,7 @@ class PolygonTestCase(TestCase):
                 "'{}' is a reserved word.".format(word)
             ):
                 Polygon(provides={word: None, 'whatever': None})
+
 
 class PolygonFrameworkUtilsTestCase(TestCase):
     def test_polygon_can_be_repred(self):

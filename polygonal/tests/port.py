@@ -1,5 +1,5 @@
 """Port related Test Cases"""
-# pylint: disable=too-few-public-methods, no-self-use, missing-docstring
+# pylint: disable=too-few-public-methods, no-self-use, missing-docstring, inherit-non-class, no-self-argument
 from unittest import TestCase
 
 from zope.interface import Interface, implements
