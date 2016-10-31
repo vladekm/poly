@@ -113,7 +113,6 @@ class PolygonWiresUpTheCore(TestCase):
         # A the Polygon is instantiated
         my_gon = Polygon(
             provides={'api1': self.myp1, 'api2': self.myp2},
-            needs=None,
         )
         # W the core is added
         my_gon.add_core(self.core())
@@ -124,6 +123,21 @@ class PolygonWiresUpTheCore(TestCase):
         self.assertEquals('ab', res_api1_a1_m1)
         self.assertEquals('cd', res_api2_a2_m1)
         self.assertEquals('ef', res_api2_a2_m2)
+
+    def test_init_plugs_in_core(self):
+        # W the Polygon is instantiated with a core
+        my_gon = Polygon(
+            provides={'api1': self.myp1, 'api2': self.myp2},
+            core=self.core()
+        )
+        # T the polygon gives access to the core on correct methods
+        res_api1_a1_m1 = my_gon.api1.a1_m1('a', 'b')
+        res_api2_a2_m1 = my_gon.api2.a2_m1('c', 'd')
+        res_api2_a2_m2 = my_gon.api2.a2_m2('e', 'f')
+        self.assertEquals('ab', res_api1_a1_m1)
+        self.assertEquals('cd', res_api2_a2_m1)
+        self.assertEquals('ef', res_api2_a2_m2)
+
 
 
 class PolygonFrameworkUtilsTestCase(TestCase):

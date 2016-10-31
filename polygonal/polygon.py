@@ -11,7 +11,7 @@ class Polygon(object):
     The core is a first class citizen and no checks are being done on it.
     Adapter checks are delegated to the ports.
     """
-    def __init__(self, provides=None, needs=None):
+    def __init__(self, provides=None, needs=None, core=None):
         provides = provides or {}
         needs = needs or {}
         for key in list(needs.keys() + provides.keys()):
@@ -21,6 +21,8 @@ class Polygon(object):
                 )
         self.provides = provides
         self.needs = needs
+        if core:
+            self.add_core(core)
 
     def __getattr__(self, *args, **kwargs):
         potential_port_name = args[0]
