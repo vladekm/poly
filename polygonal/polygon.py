@@ -48,3 +48,7 @@ class Polygon(object):
         """
         method = self.provides[port][method]
         return method(*args, **kwargs)
+
+    def add_core(self, core):
+        for port in self.provides.values():
+            port.plug(core)

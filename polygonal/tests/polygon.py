@@ -6,6 +6,7 @@ import mock
 from zope.interface import Interface, implements
 
 from .. import Polygon
+from .. import Port
 
 
 class PolygonTestCase(TestCase):
@@ -61,10 +62,33 @@ class PolygonWiresUpTheCore(TestCase):
                 pass
             def a2_m2(param1, param2):
                 pass
+        # G two ports
+        myp1 = Port(IAPI1)
+        myp2 = Port(IAPI2)
         # G a core
         class ACore(object):
-            implements(IAPI1)
-            implements(IAPI2)
+            implements(IAPI1, IAPI2)
+            def a1_m1(self, param1, param2):
+                return param1 + param2
+            def a2_m1(self, param1, param2):
+                return param1 + param2
+            def a2_m2(self, param1, param2):
+                return param1 + param2
+        # A the Polygon is instantiated
+        my_gon = Polygon(
+            provides={'api1': myp1, 'api2': myp2},
+            needs=None,
+        )
+        # W the core is added
+        my_gon.add_core(ACore())
+        # T the polygon gives access to the core on correct methods
+        res_api1_a1_m1 = my_gon.api1.a1_m1('a', 'b')
+        res_api2_a2_m1 = my_gon.api2.a2_m1('c', 'd')
+        res_api2_a2_m2 = my_gon.api2.a2_m2('e', 'f')
+        self.assertEquals('ab', res_api1_a1_m1)
+        self.assertEquals('cd', res_api2_a2_m1)
+        self.assertEquals('ef', res_api2_a2_m2)
+
 
 
 
