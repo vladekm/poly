@@ -5,7 +5,8 @@ RESERVED_WORDS = ['api', 'needs', 'provides']
 
 class Facet(object):
     """Facet collects the ports and organises them as a namespace"""
-    def __init__(self, ports=None):
+    def __init__(self, name, ports=None):
+        self.name = name
         ports = ports or {}
         for key in ports:
             if key in RESERVED_WORDS:
